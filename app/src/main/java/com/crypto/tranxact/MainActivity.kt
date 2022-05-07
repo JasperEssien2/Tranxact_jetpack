@@ -24,20 +24,20 @@ import com.crypto.tranxact.ui.theme.Purple50
 import com.crypto.tranxact.ui.theme.TranxactTheme
 
 class MainActivity : ComponentActivity() {
-    private val viewModel = viewModels<MainViewModel>(factoryProducer = ::ViewModelFactory)
+    private val viewModel by viewModels<MainViewModel>(factoryProducer = ::ViewModelFactory)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        viewModel.value.getAssets()
-        viewModel.value.getExchanges()
+        viewModel.getAssets()
+        viewModel.getExchanges()
 
         setContent {
             TranxactTheme {
 
                 // A surface container using the 'background' color from the theme
                 Surface(color = MaterialTheme.colors.background) {
-                    MyApp(viewModel.value)
+                    MyApp(viewModel)
                 }
             }
         }

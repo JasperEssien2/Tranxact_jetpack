@@ -5,30 +5,40 @@ import com.crypto.tranxact.data.models.Asset
 import com.crypto.tranxact.data.models.Exchange
 import com.crypto.tranxact.domain.Repository
 import kotlinx.coroutines.delay
+import java.lang.Exception
 
-class RepositoryImpl constructor(private val retrofitService: RetrofitService) : Repository{
+class RepositoryImpl constructor(private val retrofitService: RetrofitService) : Repository {
 
     override suspend fun assets(): Either<String, List<Asset>> {
-        val response = retrofitService.assets()
+        return try {
+            val response = retrofitService.assets()
 
-        return if(response.isSuccessful){
-            Either.Right(response.body() ?: listOf() )
-        }else{
-            Either.Left("An error occurred fetching assets" )
+            if (response.isSuccessful) {
+                Either.Right(response.body() ?: listOf())
+            } else {
+                Either.Left("An error occurred fetching assets")
+            }
+        } catch (_: Exception) {
+            Either.Left("An error occurred fetching assets")
         }
     }
 
     override suspend fun exchanges(): Either<String, List<Exchange>> {
-        val response = retrofitService.exchanges()
+        return try {
+            val response = retrofitService.exchanges()
 
-        return if(response.isSuccessful){
-            Either.Right(response.body() ?: listOf() )
-        }else{
-            Either.Left("An error occurred fetching exchanges" )
+            if (response.isSuccessful) {
+                Either.Right(response.body() ?: listOf())
+            } else {
+                Either.Left("An error occurred fetching exchanges")
+            }
+        } catch (e: Exception) {
+            Either.Left("An error occurred fetching exchanges")
         }
+
     }
 
-    companion object{
+    companion object {
 
         val instance = RepositoryImpl(RetrofitService.instance())
     }

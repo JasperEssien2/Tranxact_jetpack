@@ -193,12 +193,12 @@ fun <T> CaptionCompose(
         )
 
         when {
-            uiState.data != null -> content(uiState.data)
-            uiState.error != null -> Box(
+            _hasData(uiState) -> content(uiState.data!!)
+            _hasError(uiState) -> Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize()
             ) {
-                Text(text = uiState.error)
+                Text(text = uiState.error!!)
             }
             uiState.isLoading -> Box(
                 contentAlignment = Alignment.Center,
@@ -210,3 +210,11 @@ fun <T> CaptionCompose(
     }
 
 }
+
+@Composable
+private fun <T> _hasError(uiState: UIState<T>) =
+    uiState.error != null && !uiState.isLoading
+
+@Composable
+private fun <T>_hasData(uiState: UIState<T>) =
+    uiState.data != null && !uiState.isLoading

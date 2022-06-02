@@ -6,8 +6,6 @@ workflows:
     environment:
       groups:
         - keystore_credentials # <-- Includes - CM_KEYSTORE, CM_KEYSTORE_PASSWORD, CM_KEY_PASSWORD, CM_KEY_ALIAS
-        - google_play # <-- Includes - GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-        - other
       # Add the group environment variables in Codemagic UI (either in Application/Team variables) - https://docs.codemagic.io/variables/environment-variable-groups/
       vars:
         CM_KEYSTORE_PATH: /tmp/keystore.keystore
@@ -43,7 +41,3 @@ workflows:
     artifacts:
       - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
-    publishing:
-      google_play:
-        credentials: $GCLOUD_SERVICE_ACCOUNT_CREDENTIALS
-        track: internal

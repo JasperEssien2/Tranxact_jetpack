@@ -3,11 +3,6 @@ workflows:
     name: Android Workflow
     max_build_duration: 60
     instance_type: mac_mini
-    environment:
-      groups:
-        - keystore_credentials # <-- Includes - CM_KEYSTORE, CM_KEYSTORE_PASSWORD, CM_KEY_PASSWORD, CM_KEY_ALIAS
-      # Add the group environment variables in Codemagic UI (either in Application/Team variables) - https://docs.codemagic.io/variables/environment-variable-groups/
-
     triggering:
       events:
         - push
@@ -18,14 +13,23 @@ workflows:
           include: true
           source: true
     scripts:
+
+      # This is where the script to run mobsfscan is placed
       - name: Mobsfscan static analysis
-        script:
+        script: |
           pip3 install --upgrade mobsfscan
           mobsfscan .
-      - name: Set up local properties
-        script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
-      - name: Build Android app
-        script:
-          ./gradlew assembleRelease
+
+      - name: Set up debug key.properties
+        script: |
+          keytool -genkeypair \
+          -alias androiddebugkey_ \
+          -keypass android \
+          -keystore ~/.android/debug.keystore \
+          -storepass android \
+          -dname 'CN=Android Debug,O=Android,C=US' \
+          -keyalg 'RSA' \
+          -keysize 2048 \
+          -validity 10000
     artifacts:
       - app/build/outputs/**/**/*.apk

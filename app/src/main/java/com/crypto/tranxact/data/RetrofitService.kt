@@ -24,7 +24,7 @@ interface RetrofitService {
         fun instance(): RetrofitService {
             if (retrofitService == null) {
 
-                val apiKey = ""
+                val apiKey = "INSERT API KEY"
 
                 val httpClient = OkHttpClient.Builder()
                     .addInterceptor { chain ->

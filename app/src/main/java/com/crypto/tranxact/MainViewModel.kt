@@ -1,6 +1,5 @@
 package com.crypto.tranxact
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -13,7 +12,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 class MainViewModel constructor(private val repository: Repository) : ViewModel() {
-
 
     private val _assetStateFlow = MutableStateFlow(UIState<List<Asset>>())
     val assetStateFlow = _assetStateFlow.asStateFlow()

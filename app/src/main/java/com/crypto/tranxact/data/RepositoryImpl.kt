@@ -4,7 +4,6 @@ import arrow.core.Either
 import com.crypto.tranxact.data.models.Asset
 import com.crypto.tranxact.data.models.Exchange
 import com.crypto.tranxact.domain.Repository
-import kotlinx.coroutines.delay
 import java.lang.Exception
 
 class RepositoryImpl constructor(private val retrofitService: RetrofitService) : Repository {

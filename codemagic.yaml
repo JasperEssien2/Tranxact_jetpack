@@ -7,9 +7,7 @@ workflows:
       groups:
         - keystore_credentials # <-- Includes - CM_KEYSTORE, CM_KEYSTORE_PASSWORD, CM_KEY_PASSWORD, CM_KEY_ALIAS
       # Add the group environment variables in Codemagic UI (either in Application/Team variables) - https://docs.codemagic.io/variables/environment-variable-groups/
-      vars:
-        CM_KEYSTORE_PATH: /tmp/keystore.keystore
-      node: latest
+
     triggering:
       events:
         - push
@@ -20,24 +18,14 @@ workflows:
           include: true
           source: true
     scripts:
-      - name: Set up local properties
-        script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
-      - name: Set up key.properties file for code signing
-        script: |
-          echo $CM_KEYSTORE | base64 --decode > $CM_KEYSTORE_PATH
-          cat >> "$CM_BUILD_DIR/android/key.properties" <<EOF
-          storePassword=$CM_KEYSTORE_PASSWORD
-          keyPassword=$CM_KEY_PASSWORD
-          keyAlias=$CM_KEY_ALIAS
-          storeFile=$CM_KEYSTORE_PATH
-          EOF
-      - name: Build Android app
-        script:
-          ./gradlew assembleRelease
       - name: Mobsfscan static analysis
         script:
           pip3 install --upgrade mobsfscan
           mobsfscan .
+      - name: Set up local properties
+        script: echo "sdk.dir=$ANDROID_SDK_ROOT" > "$CM_BUILD_DIR/local.properties"
+      - name: Build Android app
+        script:
+          ./gradlew assembleRelease
     artifacts:
-      - app/build/outputs/**/**/*.aab
       - app/build/outputs/**/**/*.apk
